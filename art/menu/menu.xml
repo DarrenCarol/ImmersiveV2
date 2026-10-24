@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<theme>
+    <formatVersion>7</formatVersion>
+
+    <!-- Menu styling, matched to the main theme palette:
+         bg 0d1015 / panel 171c26 / accent 5b9dff / text e8ecf3 / muted 7f8899
+         Font paths are relative to this file (art/menu/), so ../fonts/ -> art/fonts/ -->
+    <view name="menu">
+        <menuText name="menutitle">
+            <fontPath>../fonts/Barlow-SemiBold.ttf</fontPath>
+            <fontSize>0.044</fontSize>
+            <color>e8ecf3</color>
+        </menuText>
+
+        <menuText name="menufooter">
+            <fontPath>../fonts/Barlow-Regular.ttf</fontPath>
+            <fontSize>0.02</fontSize>
+            <color>7f8899</color>
+        </menuText>
+
+        <menuText name="menutext">
+            <fontPath>../fonts/Barlow-Regular.ttf</fontPath>
+            <fontSize>0.035</fontSize>
+            <color>e8ecf3</color>
+            <separatorColor>2a3242ff</separatorColor>
+            <selectorColor>5b9dff</selectorColor>
+            <selectorColorEnd>5b9dff</selectorColorEnd>
+            <selectedColor>0d1015</selectedColor>
+        </menuText>
+
+        <menuTextSmall name="menutextsmall">
+            <forceUppercase>1</forceUppercase>
+            <fontPath>../fonts/Barlow-SemiBold.ttf</fontPath>
+            <fontSize>0.025</fontSize>
+            <color>5b9dff</color>
+        </menuTextSmall>
+
+        <menuBackground name="menubg">
+            <color>171c26f2</color>
+            <cornerSize>42 42</cornerSize>
+            <path>./art/assets/frame.png</path>
+        </menuBackground>
+
+    </view>
+</theme>
