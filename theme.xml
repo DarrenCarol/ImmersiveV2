@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme>
+  <formatVersion>7</formatVersion>
+  	<include>./art/icons/menuicons.xml</include>
+	<include>./art/menu/menu.xml</include>
+
+  <!-- ====== Palette & fonts: tweak here ====== -->
+  <variables>
+    <bg>0d1015</bg>
+    <bg2>141923</bg2>
+    <panel>171c26</panel>
+    <accent>5b9dff</accent>
+    <!-- per-system select colour (selector bar, labels, system name). Any system not listed uses the default above. -->
+    <accent if="${system.theme} == 'megadrive'">2f7bff</accent> <!-- Mega Drive - blue -->
+    <accent if="${system.theme} == 'n64'">2fd38a</accent> <!-- N64 - green -->
+    <accent if="${system.theme} == 'nes'">ff4b4b</accent> <!-- NES - red -->
+    <accent if="${system.theme} == 'pcengine'">a6e22e</accent> <!-- PC Engine - lime -->
+    <accent if="${system.theme} == 'psx'">cfd6e6</accent> <!-- PSX - silver -->
+    <accent if="${system.theme} == 'sega32x'">24d2e8</accent> <!-- 32X - cyan -->
+    <accent if="${system.theme} == 'snes'">9b7bff</accent> <!-- SNES - purple -->
+    <accent if="${system.theme} == 'favorites'">ffc233</accent> <!-- Favourites - gold -->
+    <accent if="${system.theme} == 'atari2600'">c98b4e</accent> <!-- Atari 2600 - woodgrain tan -->
+    <accent if="${system.theme} == 'dreamcast'">ff7a1a</accent> <!-- Dreamcast - orange -->
+    <accent if="${system.theme} == 'mastersystem'">e4202c</accent> <!-- Master System - Sega red -->
+    <!-- boxart max size (width height); landscape-box systems get a wider box below -->
+    <artSize>0.17 0.35</artSize>
+    <artSize if="${system.theme} == 'snes'">0.38 0.365</artSize>
+    <artSize if="${system.theme} == 'n64'">0.38 0.365</artSize>
+    <plate>8f98aa</plate>
+    <plateAlpha>e6</plateAlpha>
+    <text>e8ecf3</text>
+    <muted>7f8899</muted>
+    <fontRegular>./art/fonts/Barlow-Regular.ttf</fontRegular>
+    <fontBold>./art/fonts/Barlow-SemiBold.ttf</fontBold>
+  </variables>
+
+  <!-- ================= SYSTEM VIEW ================= -->
+  <view name="system">
+    <image name="bg" extra="true">
+      <pos>0 0</pos>
+      <size>1 1</size>
+      <color>${bg2}</color>
+      <colorEnd>${bg}</colorEnd>
+      <gradientType>vertical</gradientType>
+      <zIndex>0</zIndex>
+    </image>
+
+
+
+    <!-- random video from the selected system's games -->
+    <video name="backgroundvideo" extra="true">
+      <path>{random}</path>
+      <pos>0.5 0.5</pos>
+      <origin>0.5 0.5</origin>
+      <minSize>1 1</minSize>
+      <maxSize>2 2</maxSize>
+      <delay>2</delay>
+      <effect>none</effect>
+      <showSnapshotNoVideo>false</showSnapshotNoVideo>
+      <showSnapshotDelay>false</showSnapshotDelay>
+      <zIndex>1</zIndex>
+          <opacity>0.2</opacity> 
+    </video>
+    <image name="veil" extra="true">
+      <pos>0 0</pos><size>1 1</size>
+      <color>${bg}${veil}</color>
+      <zIndex>2</zIndex>
+    </image>
+
+    <!-- wider than the screen so the previous / next logos hang off the edges -->
+    <carousel name="systemcarousel">
+      <type>horizontal</type>
+      <pos>0.5 0.30</pos>
+      <size>1.65 0.30</size>
+      <origin>0.5 0</origin>
+      <color>00000000</color>
+      <logoScale>1.73</logoScale>
+      <logoSize>0.255 0.15</logoSize>
+      <logoAlignment>center</logoAlignment>
+      <maxLogoCount>3</maxLogoCount>
+      <minLogoOpacity>0.12</minLogoOpacity>
+      <zIndex>50</zIndex>
+    </carousel>
+
+    <!-- logos live in art/logos/<system>.svg (e.g. snes.svg); text is the fallback -->
+    <image name="logo">
+      <path>./art/logos/${system.theme}.svg</path>
+    </image>
+    <text name="logoText">
+      <fontPath>${fontBold}</fontPath>
+      <fontSize>0.06</fontSize>
+      <color>${text}</color>
+      <alignment>center</alignment>
+      <forceUppercase>true</forceUppercase>
+    </text>
+
+    <image name="indicator" extra="true">
+      <pos>0.5 0.63</pos>
+      <origin>0.5 0</origin>
+      <size>0.05 0.005</size>
+      <color>${accent}</color>
+      <roundCorners>0.5</roundCorners>
+      <zIndex>60</zIndex>
+    </image>
+
+    <!-- built-in "N GAMES" line replaced by the TOTAL GAMES row below -->
+    <text name="systemInfo">
+      <visible>false</visible>
+    </text>
+
+    <!-- manufacturer / year subtitle -->
+    <text name="sys_sub" extra="true">
+      <text>Released: {binding:releaseYear}</text>
+      <pos>0 0.655</pos>
+      <size>1 0.04</size>
+      <fontPath>${fontBold}</fontPath>
+      <fontSize>0.026</fontSize>
+      <color>${accent}</color>
+      <alignment>center</alignment>
+      <forceUppercase>true</forceUppercase>
+      <zIndex>60</zIndex>
+    </text>
+
+    <!-- stat rows (labels right-aligned, values left-aligned around centre) -->
+    <text name="stat_total_lbl" extra="true">
+      <text>TOTAL GAMES</text>
+      <pos>0.485 0.715</pos>
+      <origin>1 0</origin>
+      <size>0.3 0.035</size>
+      <fontPath>${fontBold}</fontPath>
+      <fontSize>0.022</fontSize>
+      <color>${accent}</color>
+      <alignment>right</alignment>
+      <zIndex>60</zIndex>
+    </text>
+    <text name="stat_total_val" extra="true">
+      <text>{binding:total}</text>
+      <pos>0.515 0.715</pos>
+      <origin>0 0</origin>
+      <size>0.4 0.035</size>
+      <fontPath>${fontRegular}</fontPath>
+      <fontSize>0.026</fontSize>
+      <color>${text}</color>
+      <alignment>left</alignment>
+      <zIndex>60</zIndex>
+    </text>
+
+    <text name="stat_fav_lbl" extra="true">
+      <text>FAVOURITES</text>
+      <pos>0.485 0.757</pos>
+      <origin>1 0</origin>
+      <size>0.3 0.035</size>
+      <fontPath>${fontBold}</fontPath>
+      <fontSize>0.022</fontSize>
+      <color>${accent}</color>
+      <alignment>right</alignment>
+      <zIndex>60</zIndex>
+    </text>
+    <text name="stat_fav_val" extra="true">
+      <text>{binding:favorites}</text>
+      <pos>0.515 0.757</pos>
+      <origin>0 0</origin>
+      <size>0.4 0.035</size>
+      <fontPath>${fontRegular}</fontPath>
+      <fontSize>0.026</fontSize>
+      <color>${text}</color>
+      <alignment>left</alignment>
+      <zIndex>60</zIndex>
+    </text>
+
+    <text name="stat_most_lbl" extra="true">
+      <text>MOST PLAYED</text>
+      <pos>0.485 0.799</pos>
+      <origin>1 0</origin>
+      <size>0.3 0.035</size>
+      <fontPath>${fontBold}</fontPath>
+      <fontSize>0.022</fontSize>
+      <color>${accent}</color>
+      <alignment>right</alignment>
+      <zIndex>60</zIndex>
+    </text>
+    <text name="stat_most_val" extra="true">
+      <text>{binding:mostPlayed}</text>
+      <pos>0.515 0.799</pos>
+      <origin>0 0</origin>
+      <size>0.4 0.035</size>
+      <fontPath>${fontRegular}</fontPath>
+      <fontSize>0.026</fontSize>
+      <color>${text}</color>
+      <alignment>left</alignment>
+      <zIndex>60</zIndex>
+    </text>
+
+    <text name="stat_time_lbl" extra="true">
+      <text>TOTAL TIME</text>
+      <pos>0.485 0.841</pos>
+      <origin>1 0</origin>
+      <size>0.3 0.035</size>
+      <fontPath>${fontBold}</fontPath>
+      <fontSize>0.022</fontSize>
+      <color>${accent}</color>
+      <alignment>right</alignment>
+      <zIndex>60</zIndex>
+    </text>
+    <text name="stat_time_val" extra="true">
+      <text>{binding:gameTime}</text>
+      <pos>0.515 0.841</pos>
+      <origin>0 0</origin>
+      <size>0.4 0.035</size>
+      <fontPath>${fontRegular}</fontPath>
+      <fontSize>0.026</fontSize>
+      <color>${text}</color>
+      <alignment>left</alignment>
+      <zIndex>60</zIndex>
+    </text>
+
+    <text name="stat_plays_lbl" extra="true">
+      <text>AMOUNT PLAYED</text>
+      <pos>0.485 0.883</pos>
+      <origin>1 0</origin>
+      <size>0.3 0.035</size>
+      <fontPath>${fontBold}</fontPath>
+      <fontSize>0.022</fontSize>
+      <color>${accent}</color>
+      <alignment>right</alignment>
+      <zIndex>60</zIndex>
+    </text>
+    <text name="stat_plays_val" extra="true">
+      <text>{binding:played} plays  /  {binding:gamesPlayed} games</text>
+      <pos>0.515 0.883</pos>
+      <origin>0 0</origin>
+      <size>0.4 0.035</size>
+      <fontPath>${fontRegular}</fontPath>
+      <fontSize>0.026</fontSize>
+      <color>${text}</color>
+      <alignment>left</alignment>
+      <zIndex>60</zIndex>
+    </text>
+
+    <helpsystem name="help">
+      <pos>0.5 0.965</pos>
+      <origin>0.5 0.5</origin>
+      <textColor>${muted}</textColor>
+      <iconColor>${muted}</iconColor>
+      <fontPath>${fontRegular}</fontPath>
+      <fontSize>0.022</fontSize>
+    </helpsystem>
+
+  </view>
+
+
+  <!-- ================= GAMELIST: BASIC (no media) ================= -->
+  <view name="basic">
+    <image name="bg" extra="true">
+      <pos>0 0</pos><size>1 1</size>
+      <color>${bg2}</color><colorEnd>${bg}</colorEnd>
+      <gradientType>vertical</gradientType>
+      <zIndex>0</zIndex>
+    </image>
+    <textlist name="gamelist">
+      <pos>0.15 0.08</pos>
+      <size>0.70 0.82</size>
+      <fontPath>${fontRegular}</fontPath>
+      <fontSize>0.034</fontSize>
+      <primaryColor>${text}</primaryColor>
+      <secondaryColor>${muted}</secondaryColor>
+      <selectedColor>${bg}</selectedColor>
+      <selectorColor>${accent}</selectorColor>
+      <selectorHeight>0.06</selectorHeight>
+      <horizontalMargin>0.015</horizontalMargin>
+      <lineSpacing>1.3</lineSpacing>
+      <zIndex>20</zIndex>
+    </textlist>
+    <helpsystem name="help">
+      <pos>0.5 0.965</pos><origin>0.5 0.5</origin>
+      <textColor>${muted}</textColor><iconColor>${muted}</iconColor>
+      <fontPath>${fontRegular}</fontPath><fontSize>0.022</fontSize>
+    </helpsystem>
+
+  </view>
+
+  <!-- ================= GAMELIST: DETAILED / VIDEO ================= -->
+  <view name="detailed,video,gamecarousel">
+    <image name="bg" extra="true">
+      <pos>0 0</pos><size>1 1</size>
+      <color>${bg2}</color><colorEnd>${bg}</colorEnd>
+      <gradientType>vertical</gradientType>
+      <zIndex>0</zIndex>
+    </image>
+
+    <!-- 50% dark overlay on the video -->
+    <image name="veil" extra="true">
+      <pos>0 0</pos><size>1 1</size>
+      <color>${bg}${veil}</color>
+      <zIndex>2</zIndex>
+    </image>
+
+    <!-- the screenshot/video is the full-screen background; hide ES's default image slot -->
+    <image name="md_image">
+      <visible>false</visible>
+    </image>
+
+    <!-- ratings: hidden and parked off screen -->
+    <rating name="md_rating">
+      <pos>-1 -1</pos>
+      <visible>false</visible>
+    </rating>
+    <text name="md_lbl_rating">
+      <pos>-1 -1</pos>
+      <visible>false</visible>
+    </text>
+
+    <!-- left card: list -->
+    <image name="listcard" extra="true">
+      <pos>0.025 0.04</pos><size>0.375 0.88</size>
+      <color>${panel}${cardAlpha}</color>
+      <roundCorners>0.02</roundCorners>
+      <zIndex>5</zIndex>
+    </image>
+
+    <!-- accent edge lights on the two cards (follow the per-system colour) -->
+    <image name="listedge" extra="true">
+      <pos>0.025 0.04</pos><size>0.375 0.004</size>
+      <color>${accent}</color>
+      <roundCorners>0.5</roundCorners>
+      <zIndex>6</zIndex>
+    </image>
+
+    <!-- system logo, top left of the list card (art/logos/<system>.svg, same files as the system view) -->
+    <image name="syslogo" extra="true">
+      <path>./art/logos/${system.theme}.svg</path>
+      <pos>0.045 0.052</pos>
+      <origin>0 0</origin>
+      <maxSize>0.16 0.055</maxSize>
+      <horizontalAlignment>left</horizontalAlignment>
+      <zIndex>20</zIndex>
+    </image>
+
+    <!-- vertical divider between list and info (80% of screen height, system colour) -->
+    <text name="divider" extra="true">
+      <text> </text>
+      <pos>0.4084 0.1</pos>
+      <origin>0 0</origin>
+      <size>0.00175 0.8</size>
+      <color>${accent}FF</color>
+      <backgroundColor>${accent}FF</backgroundColor>
+      <zIndex>45</zIndex>
+    </text>
+
+    <text name="hline_top" extra="true">
+      <text> </text>
+      <pos>0.435 0.50370</pos>
+      <origin>0 0</origin>
+      <size>0.53 0.002778</size>
+      <color>${accent}FF</color>
+      <backgroundColor>${accent}FF</backgroundColor>
+      <zIndex>45</zIndex>
+    </text>
+
+    <text name="hline_desc" extra="true">
+      <text> </text>
+      <pos>0.435 0.72778</pos>
+      <origin>0 0</origin>
+      <size>0.53 0.002778</size>
+      <color>${accent}FF</color>
+      <backgroundColor>${accent}FF</backgroundColor>
+      <zIndex>45</zIndex>
+    </text>
+
+    <textlist name="gamelist">
+      <pos>0.035 0.13</pos>
+      <size>0.355 0.77</size>
+      <fontPath>${fontRegular}</fontPath>
+      <fontSize>0.026</fontSize>
+      <primaryColor>${text}</primaryColor>
+      <secondaryColor>${muted}</secondaryColor>
+      <selectedColor>${bg}</selectedColor>
+      <selectorColor>${accent}</selectorColor>
+      <!-- no selectorHeight: selector bar matches the row height exactly -->
+      <!-- selectorOffsetY nudges the bar to centre it on the text: more negative moves the bar up (text looks lower in it), more positive moves it down -->
+      <selectorOffsetY>-0.003</selectorOffsetY>
+      <horizontalMargin>0.012</horizontalMargin>
+      <lineSpacing>1.6</lineSpacing>
+      <zIndex>20</zIndex>
+    </textlist>
+
+    <!-- media row: video (falls back to screenshot) + boxart -->
+    <video name="md_video">
+      <pos>0.5 0.5</pos>
+      <origin>0.5 0.5</origin>
+      <minSize>1 1</minSize>
+      <maxSize>2 2</maxSize>
+      <delay>0.6</delay>
+      <showSnapshotNoVideo>true</showSnapshotNoVideo>
+      <showSnapshotDelay>true</showSnapshotDelay>
+      <effect>none</effect>
+      <zIndex>1</zIndex>
+          <opacity>0.2</opacity> 
+
+    </video>
+
+    <image name="md_thumbnail">
+      <pos>0.70 0.48</pos>
+      <origin>0.5 1</origin>
+      <maxSize>${artSize}</maxSize>
+      <zIndex>30</zIndex>
+    </image>
+
+    <!-- right card: title, stats, description -->
+    <image name="infocard" extra="true">
+      <pos>0.42 0.50</pos><size>0.56 0.42</size>
+      <color>${panel}${cardAlpha}</color>
+      <roundCorners>0.02</roundCorners>
+      <zIndex>5</zIndex>
+    </image>
+
+    <text name="md_name">
+      <pos>0.435 0.515</pos><size>0.53 0.055</size>
+      <fontPath>${fontBold}</fontPath>
+      <fontSize>0.042</fontSize>
+      <color>${text}</color>
+      <glowColor>000000b0</glowColor>
+      <glowSize>2</glowSize>
+      <zIndex>30</zIndex>
+    </text>
+
+    <!-- row 1: category, players, released -->
+    <text name="md_lbl_genre">
+      <text>CATEGORY</text>
+      <pos>0.435 0.585</pos><size>0.17 0.02</size>
+      <fontPath>${fontBold}</fontPath><fontSize>0.017</fontSize>
+      <color>${accent}</color><zIndex>30</zIndex>
+    </text>
+    <text name="md_genre">
+      <pos>0.435 0.605</pos><size>0.17 0.03</size>
+      <fontPath>${fontRegular}</fontPath><fontSize>0.026</fontSize>
+      <color>${text}</color><zIndex>30</zIndex>
+    </text>
+
+    <text name="md_lbl_players">
+      <text>PLAYERS</text>
+      <pos>0.6117 0.585</pos><size>0.17 0.02</size>
+      <fontPath>${fontBold}</fontPath><fontSize>0.017</fontSize>
+      <color>${accent}</color><zIndex>30</zIndex>
+    </text>
+    <text name="md_players">
+      <pos>0.6117 0.605</pos><size>0.17 0.03</size>
+      <fontPath>${fontRegular}</fontPath><fontSize>0.026</fontSize>
+      <color>${text}</color><zIndex>30</zIndex>
+    </text>
+
+    <text name="md_lbl_releasedate">
+      <text>RELEASED</text>
+      <pos>0.7883 0.585</pos><size>0.17 0.02</size>
+      <fontPath>${fontBold}</fontPath><fontSize>0.017</fontSize>
+      <color>${accent}</color><zIndex>30</zIndex>
+    </text>
+    <datetime name="md_releasedate">
+      <pos>0.7883 0.605</pos><size>0.17 0.03</size>
+      <fontPath>${fontRegular}</fontPath><fontSize>0.026</fontSize>
+      <color>${text}</color>
+      <format>%Y</format>
+      <zIndex>30</zIndex>
+    </datetime>
+
+
+    <!-- row 2: plays, time played, last played -->
+    <text name="md_lbl_playcount">
+      <text>PLAYS</text>
+      <pos>0.435 0.66</pos><size>0.17 0.02</size>
+      <fontPath>${fontBold}</fontPath><fontSize>0.017</fontSize>
+      <color>${accent}</color><zIndex>30</zIndex>
+    </text>
+    <text name="md_playcount">
+      <pos>0.435 0.68</pos><size>0.17 0.03</size>
+      <fontPath>${fontRegular}</fontPath><fontSize>0.026</fontSize>
+      <color>${text}</color><zIndex>30</zIndex>
+    </text>
+
+    <text name="md_lbl_gametime">
+      <text>TIME PLAYED</text>
+      <pos>0.6117 0.66</pos><size>0.17 0.02</size>
+      <fontPath>${fontBold}</fontPath><fontSize>0.017</fontSize>
+      <color>${accent}</color><zIndex>30</zIndex>
+    </text>
+    <text name="md_gametime">
+      <pos>0.6117 0.68</pos><size>0.17 0.03</size>
+      <fontPath>${fontRegular}</fontPath><fontSize>0.026</fontSize>
+      <color>${text}</color><zIndex>30</zIndex>
+    </text>
+
+    <text name="md_lbl_lastplayed">
+      <text>LAST PLAYED</text>
+      <pos>0.7883 0.66</pos><size>0.17 0.02</size>
+      <fontPath>${fontBold}</fontPath><fontSize>0.017</fontSize>
+      <color>${accent}</color><zIndex>30</zIndex>
+    </text>
+    <datetime name="md_lastplayed">
+      <pos>0.7883 0.68</pos><size>0.17 0.03</size>
+      <fontPath>${fontRegular}</fontPath><fontSize>0.026</fontSize>
+      <color>${text}</color>
+      <displayRelative>true</displayRelative>
+      <zIndex>30</zIndex>
+    </datetime>
+
+
+    <!-- description (auto-scrolls if long) -->
+    <text name="md_description">
+      <pos>0.435 0.765</pos><size>0.53 0.14</size>
+      <fontPath>${fontRegular}</fontPath>
+      <fontSize>0.024</fontSize>
+      <color>${muted}</color>
+      <lineSpacing>1.25</lineSpacing>
+      <zIndex>30</zIndex>
+    </text>
+
+    <helpsystem name="help">
+      <pos>0.5 0.965</pos><origin>0.5 0.5</origin>
+      <textColor>${muted}</textColor><iconColor>${muted}</iconColor>
+      <fontPath>${fontRegular}</fontPath><fontSize>0.022</fontSize>
+    </helpsystem>
+
+
+  </view>
+
+  <!-- ================= GAMELIST: CAROUSEL (game logos instead of text names) =================
+       Same layout as above (shared extras); only the list differs. Select "Carousel" as the
+       gamelist view style for a system. Games without a logo fall back to their name as text. -->
+  <view name="gamecarousel">
+    <!-- selection highlight behind the centred (selected) logo -->
+    <image name="carouselbar" extra="true">
+      <pos>0.035 0.515</pos>
+      <origin>0 0.5</origin>
+      <size>0.355 0.115</size>
+      <color>${accent}40</color>
+      <roundCorners>0.15</roundCorners>
+      <zIndex>15</zIndex>
+    </image>
+
+    <gamecarousel name="gamecarousel">
+      <type>vertical</type>
+      <pos>0.035 0.13</pos>
+      <size>0.355 0.77</size>
+      <origin>0 0</origin>
+      <imageSource>marquee</imageSource>
+      <logoSize>0.33 0.10</logoSize>
+      <logoScale>1.12</logoScale>
+      <logoAlignment>center</logoAlignment>
+      <maxLogoCount>7</maxLogoCount>
+      <minLogoOpacity>0.45</minLogoOpacity>
+      <color>00000000</color>
+      <colorEnd>00000000</colorEnd>
+      <zIndex>20</zIndex>
+    </gamecarousel>
+
+    <!-- text shown when a game has no logo -->
+    <text name="gamecarouselLogoText">
+      <fontPath>${fontRegular}</fontPath>
+      <fontSize>0.026</fontSize>
+      <color>${text}</color>
+      <alignment>center</alignment>
+    </text>
+
+
+    
+  </view>
+
+  <view name="screen, system, basic, detailed, grid">
+    <controllerActivity name="controllerActivity">
+      <pos>0.02 0.02</pos>
+      <origin>0 0</origin>
+    </controllerActivity>
+    <joystickActivity name="joystick_activity">
+      <pos>0.02 0.02</pos>
+      <origin>0 0</origin>
+    </joystickActivity>
+  </view>
+
+  
+</theme>
